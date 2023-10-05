@@ -6,6 +6,9 @@ router.get('/login', async function(req, res, next) {
     res.render('login',{ title: 'Login'});
 });
 
+router.get('/google',async function(req, res, next) {
+    res.send('logging with google');
+});
 router.get('/signup', function(req, res){
     res.render('register',{message: 'Register'});
 });
