@@ -7,7 +7,7 @@ router.get('/login', async function(req, res, next) {
 });
 
 router.get('/signup', function(req, res){
-    res.render('register',{message: Register});
+    res.render('register',{message: 'Register'});
 });
 
 module.exports = router;
