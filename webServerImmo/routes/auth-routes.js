@@ -5,17 +5,7 @@ const flash = require('connect-flash');
 
 //auth loging
 router.use(flash());
-
-
-const authCheck=(req, res, next)=>{
-    if(req.user){
-        //7if user not log in
-        res.redirect('/');
-    }else{
-        next();//go on of the next piece of the middleware
-    }
-}
-router.get('/login',authCheck, async function(req, res, next) {
+router.get('/login', async function(req, res, next) {
     res.render('login',{ title: 'Login'});
 });
 
@@ -41,7 +31,7 @@ router.get('/logout', async function(req, res, next) {
 // auth with google
 //handle with passeport
 //res.send("logging in with google");
-router.get('/google',authCheck, passport.authenticate('google', {
+router.get('/google', passport.authenticate('google', {
     scope:['profile','email']//what we want to retrieve from the profile(infos)
 }));
 
@@ -59,7 +49,7 @@ router.get('/google/redirect',passport.authenticate('google'),(req, res) =>{
 });
 
 
-router.get('/signup',authCheck, function(req, res){
+router.get('/signup', function(req, res){
     const role = req.query.role; // get the query parameters
     console.log(role); //test
     res.render('register',{message: req.flash('message'), role:role});

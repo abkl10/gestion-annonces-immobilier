@@ -1,11 +1,46 @@
 <html>
+<head>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
 <body>
-        <h1>Profile Page</h1>
-         <div>
-            <ul>
-                <li>UserName : <%= user.username %></li>
-                <li>Role : <%= user.role %></li>
-            </ul>
+<%- include('nav.ejs') %>
+<div class="flex justify-center items-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h1 class="justify-center text-2xl font-semibold mb-6 ">Profile Page</h1>
+        <div class="p-4 sm:p-0">
+    <div class="mt-6 border-t border-gray-100">
+        <div class="flex justify-center items-center"> <!-- Add this div for avatar -->
+            <div class="avatar">
+                <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                    <img class="rounded-full" src="https://i.ibb.co/mbCZvRv/avatar4.png" alt="Avatar Image" />
+                </div>
+            </div>
+        </div>
     </div>
+        <dl class="divide-y divide-gray-100">
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">UserName</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><%= user.username %></dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">FirstName</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><%= user.nom %></dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">LastName</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><%= user.prenom %></dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">Email address</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><%= user.email %></dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">Role</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><%= user.role %></dd>
+            </div>
+        </dl>
+    </div>
+</div>
+</div>
 </body>
 </html>
