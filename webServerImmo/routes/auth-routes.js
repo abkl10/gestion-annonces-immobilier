@@ -26,7 +26,7 @@ so the developer want to take the code and exchange with profile infos
  */
 router.get('/google/redirect',passport.authenticate('google'),(req, res) =>{
     console.log("user auth",req.user);
-    res.send('Welcome to your profile')
+    res.redirect('/profile/');
 });
 
 
