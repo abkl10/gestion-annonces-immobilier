@@ -4,16 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var keys=require('./config/keys')
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var cookiesession = require('express-session')
-var authRoutes= require('./routes/auth-routes');
 var cookiesession=require('express-session');
 var passportSetup=require("./config/passeport-setup");
 var passport = require('passport')
 
 var app = express();  
-
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+var profileRoutes = require('./routes/profile-route')
+var authRoutes= require('./routes/auth-routes');
 
 
 
@@ -29,6 +29,10 @@ app.use(cookiesession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/auth',authRoutes);
+app.use('/profile', profileRoutes)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,9 +44,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/auth',authRoutes);
+
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
