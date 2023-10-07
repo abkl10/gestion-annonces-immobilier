@@ -29,6 +29,8 @@ router.get('/google/redirect',passport.authenticate('google'),(req, res) =>{
     res.send('Welcome to your profile')
 });
 
+
+
 router.get('/signup', function(req, res){
     res.render('register',{message: 'Register'});
 });
