@@ -3,21 +3,28 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var keys=require('./config/keys')
-var cookiesession = require('express-session')
 var cookiesession=require('express-session');
 var passportSetup=require("./config/passeport-setup");
-var passport = require('passport')
-
-var app = express();  
+var keys=require("./config/keys");
+const mongoose = require('mongoose')
+var passport=require("passport");
+const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var profileRoutes = require('./routes/profile-route')
-var authRoutes= require('./routes/auth-routes');
+var authRoutes=require('./routes/auth-routes');
+var profileRoutes=require('./routes/profile-route');
+var app = express();
 
 
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-
+// view engine setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //encrypt our cookie
 app.use(cookiesession({
@@ -29,41 +36,11 @@ app.use(cookiesession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+//setUp routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth',authRoutes);
-app.use('/profile', profileRoutes)
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-const mongoose = require('mongoose')
+app.use('/profile',profileRoutes);
 
 
 mongoose.connect('mongodb://localhost:27017/').then(() => {
@@ -72,4 +49,48 @@ mongoose.connect('mongodb://localhost:27017/').then(() => {
     console.log(e.message)
 })
 
+
+
+// Gestionnaire d'erreurs
+app.use(function(err, req, res, next) {
+    // Configuration des variables locales, fourniture de l'erreur uniquement en mode développement
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    // Renvoi de la page d'erreur avec le code d'erreur approprié
+    res.status(err.status || 500);
+    res.render('error');
+});
+
 module.exports = app;
+
+
+
+
+
+
+
+
+
+
+
+/*
+const newAnnonce = new Annonce({
+    titre: "Sample Title",
+    type: "location",
+    publication: true,
+    statut: "disponible", // Use 'disponible' instead of 'available'
+    description: "Sample description",
+    prix: 1000,
+    // date will default to the current date
+});
+
+// Save the document to the database
+newAnnonce.save()
+    .then(savedAnnonce => {
+        console.log("Annonce saved successfully:", savedAnnonce);
+    })
+    .catch(error => {
+        console.error("Error saving annonce:", error);
+    });
+*/
