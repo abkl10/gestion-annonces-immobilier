@@ -10,9 +10,13 @@ const mongoose = require('mongoose')
 var passport=require("passport");
 const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
+var annoncesRouter=require('./routes/annonces');
 var usersRouter = require('./routes/users');
 var authRoutes=require('./routes/auth-routes');
 var profileRoutes=require('./routes/profile-route');
+const Annonce=require('./models/annonces')
+const fileUpload = require("express-fileupload");
+
 var app = express();
 
 
@@ -25,7 +29,14 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(
+    fileUpload({
+        limits: {
+            fileSize: 10000000,
+        },
+        abortOnLimit: true,
+    })
+);
 //encrypt our cookie
 app.use(cookiesession({
     maxAge: 24*60*60*1000,
@@ -41,6 +52,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth',authRoutes);
 app.use('/profile',profileRoutes);
+app.use('/ad',annoncesRouter);
 
 
 mongoose.connect('mongodb://localhost:27017/').then(() => {
