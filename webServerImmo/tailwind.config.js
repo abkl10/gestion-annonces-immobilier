@@ -62,5 +62,5 @@ module.exports = {
             },
         },
     },
-    plugins: [require("tw-elements/dist/plugin.cjs"),   require('@tailwindcss/forms'),]
+    plugins: [require("tw-elements/dist/plugin.cjs"),   require('@tailwindcss/forms'),require("daisyui"),]
 }

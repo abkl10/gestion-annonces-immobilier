@@ -23,22 +23,17 @@
             <div class="mb-6 lg:mb-0">
                 <div class="relative block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
                     <div class="flex">
-                        <div class="relative mx-4 -mt-4 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
-                            <div class="grid gap-4">
-                                <% if (announcement.photos.length > 0) { %>
-                                    <div>
-                                        <img class="h-auto max-w-full rounded-lg" src="/images/<%= announcement.photos[0] %>" alt="">
+                        <!-- Add your carousel here -->
+                        <div class="carousel w-full">
+                            <% announcement.photos.forEach(function(photo, index) { %>
+                                <div id="<%= announcement._id %>-slide<%= index + 1 %>" class="carousel-item relative w-full">
+                                    <img src="/images/<%= photo %>" class="w-full" />
+                                    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                                        <a href="#<%= announcement._id %>-slide<%= index === 0 ? announcement.photos.length : index %>" class="btn btn-circle">❮</a>
+                                        <a href="#<%= announcement._id %>-slide<%= index === announcement.photos.length - 1 ? 1 : index + 2 %>" class="btn btn-circle">❯</a>
                                     </div>
-                                <% } %>
-                                <div class="grid grid-cols-5 gap-4">
-                                    <% for (let i = 1; i < announcement.photos.length; i++) { %>
-                                        <div>
-                                            <img class="h-auto max-w-full rounded-lg" src="/images/<%= announcement.photos[i] %>" alt="">
-                                        </div>
-                                    <% } %>
                                 </div>
-                            </div>
-
+                            <% }); %>
                         </div>
                     </div>
                     <div class="p-6">
@@ -52,8 +47,7 @@
                         <div class="flex justify-center">
                             <a href="#!" data-te-ripple-init data-te-ripple-color="light"
                                class="inline-block rounded-full bg-primary px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">Read more</a>
-
-                            <% if (user && user.role=='admin') { %>
+                            <% if (user && user.role == 'admin') { %>
                                 <a href="/ad/delete-announcement/<%= announcement._id %>" class="ml-2 rounded-full inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -66,7 +60,6 @@
                                     </svg>
                                     Edit
                                 </a>
-
                             <% } %>
                         </div>
                     </div>
