@@ -33,7 +33,21 @@ const annoncesShema = new Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    questions: [
+        {
+            text: String,
+            username: String,
+            date: Date,
+            answers: [
+                {
+                    text: String,
+                    username: String,
+                    date: Date
+                }
+            ]
+        }
+    ]
 });
 
 module.exports = mongoose.model('annonces', annoncesShema);

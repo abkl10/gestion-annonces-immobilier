@@ -3,7 +3,6 @@ var router = express.Router();
 var Annonce = require('../models/annonces');
 const path=require('path');
 
-
 const authCheck=(req, res, next)=>{
     if(!req.user){
         //7if user not log in
@@ -59,13 +58,13 @@ router.post('/create-announcement', async function (req, res, next) {
                 photos = [photos]; // Convert to an array if it's not already
             }
             photos.forEach((p, i) => {
-                const splittedName = p.name.split(".");
+                const name = p.name.split(".");
                 console.log(p.name + " et " + p.mv);
                 const imgUrl =
                     new Date().getTime() +
                     i +
                     "." +
-                    splittedName[splittedName.length - 1];
+                    name[name.length - 1];
                 p.mv(path.join(imageDossier, imgUrl), (err) => {
                     if (err) {
                         console.error(err);
@@ -223,6 +222,67 @@ router.get('/delete-image/:announcementId', async (req, res) => {
         res.status(500).send(`An error occurred while deleting the image: ${error.message}`);
     }
 });
+
+
+
+router.get('/read', authCheck,async function(req, res, next) {
+    try {
+        // Use the find() method to retrieve all announcements
+        const announcements = await Annonce.find({publication: true});
+        // Render the 'annonces' view and pass the announcements as data
+        res.render('read-announcements', { title: 'Read-Front', announcements: announcements, user:req.user });
+    } catch (error) {
+        console.error("Error retrieving announcements:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+router.post("/:id", async function (req, res) {
+        try {
+            // Find the announcement by its unique ID
+            const announcementId = req.params.id;
+            const announcement = await Annonce.findById(announcementId);
+
+            if (!announcement) {
+                return res.status(404).send('Announcement not found');
+            }
+
+            if (!announcement.questions) {
+                announcement.questions = [];
+            }
+
+            const questions = announcement.questions;
+
+            if (req.body.answer && req.user.role == 'admin') {
+                const index = questions.findIndex(q => q.text === req.body.question);
+                if (index !== -1) {
+                    if (!questions[index].answers) {
+                        questions[index].answers = [];
+                    }
+
+                    questions[index].answers.push({
+                        username: req.user.username,
+                        text: req.body.answer,
+                        date: new Date()
+                    });
+                }
+            } else if (req.body.question && req.user.role === 'user') {
+                questions.push({
+                    username: req.user.username,
+                    text: req.body.question,
+                    date: new Date(),
+                    answers: []
+                });
+            }
+
+            await announcement.save();
+
+            res.redirect(`/ad/annonces/`);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(`An error occurred while processing your request: ${error.message}`);
+        }
+    }
+);
 
 
 module.exports = router;

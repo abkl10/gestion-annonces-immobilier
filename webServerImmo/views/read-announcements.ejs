@@ -1,0 +1,128 @@
+<%- include('layout.ejs') %>
+<%- include('nav.ejs') %>
+<div class="min-h-screen flex items-center justify-center">
+    <div class="w-1/2 mb-6 "> <!-- Adjust the width as needed -->
+        <% announcements.forEach(function(announcement) { %>
+            <h2 class="mb-12 text-center text-3xl font-bold">Announcement <%= announcement.titre %></h2>
+        <% });%>
+        <% announcements.forEach(function(announcement) { %>
+            <div class="mb-6 lg:mb-0">
+                <div class="announcement-card">
+                    <div class="relative block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                        <div class="flex">
+                            <!-- Add your carousel here -->
+                            <div class="carousel w-full">
+                                <% announcement.photos.forEach(function(photo, index) { %>
+                                    <div id="<%= announcement._id %>-slide<%= index + 1 %>" class="carousel-item relative w-full">
+                                        <img src="/images/<%= photo %>" class="w-full" />
+                                        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                                            <a href="#<%= announcement._id %>-slide<%= index === 0 ? announcement.photos.length : index %>" class="btn btn-circle">❮</a>
+                                            <a href="#<%= announcement._id %>-slide<%= index === announcement.photos.length - 1 ? 1 : index + 2 %>" class="btn btn-circle">❯</a>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h5 class="mb-3 text-lg font-bold"><%= announcement.titre %></h5>
+                            <p class="mb-4 text-neutral-500 dark:text-neutral-300">
+                                <small>Published <u><%= announcement.date %></u> </small>
+                            </p>
+                            <p class="mb-4 pb-2">
+                                <%= announcement.description %>
+                            </p>
+                        </div>
+                        <!-- Q&A section -->
+                        <div class="mt-6">
+                            <div class="max-h-[300px] overflow-y-auto">
+                                <% announcement.questions.forEach(function(question) { %>
+                                    <div class="row mb-2">
+                                        <div class="col ml-6 mr-6">
+                                            <!-- Chat bubble for question -->
+
+                                            <div class="chat chat-start">
+                                                <div class="chat-image avatar">
+                                                    <div class="w-10 rounded-full">
+                                                        <img class="rounded-full" src="https://i.ibb.co/mbCZvRv/avatar4.png" alt="Avatar Image" />                                                    </div>
+                                                </div>
+                                                <div class="chat-header">
+                                                    <%= question.username %>
+                                                    <time class="text-xs opacity-50"><%= question.date ? question.date.toLocaleString() : 'xxx' %></time>
+                                                </div>
+                                                <div class="chat-bubble"><%= question.text %></div>
+                                            </div>
+
+                                            <div class="container border border-white rounded">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="container mt-4">
+                                                            <% question.answers.forEach(function(reponse) { %>
+                                                                <!-- Chat bubble for answer -->
+                                                                <div class="chat chat-end">
+                                                                    <div class="chat-image avatar">
+                                                                        <div class="w-10 rounded-full">
+                                                                            <img class="rounded-full" src="https://i.ibb.co/mbCZvRv/avatar4.png" alt="Avatar Image" />                                                    </div>
+                                                                    </div>
+                                                                    <div class="chat-header">
+                                                                        <%= reponse.username %>
+                                                                        <time class="text-xs opacity-50"><%= reponse.date ? question.date.toLocaleString() : 'xxx' %></time>
+                                                                    </div>
+                                                                    <div class="chat-bubble"><%= reponse.text %></div>
+                                                                </div>
+
+                                                            <% }); %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <% if (user && user.role=='admin') { %>
+                                                <div class="row">
+                                                    <div class="col mt-4">
+                                                        <form action="/ad/<%= announcement._id %>" role="form" method="post">
+                                                            <div class="col-9">
+                                                                <input type="text" placeholder="Type here your answer" class="input input-bordered w-full max-w-xs" name="answer"/>
+                                                                <input class="btn btn-success mt-1" type="submit" value="Envoyer" />
+                                                                <input type="hidden" name="question" value="<%= question.text %>" />
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            <% } %>
+                                        </div>
+
+                                    </div>
+                                <% }); %>
+                                <% if (user && user.role == 'user') { %>
+                                    <div class="mb-3 ml-6">
+                                        <form action="/ad/<%= announcement._id %>" role="form" method="POST" onsubmit="refreshPage()">
+                                            <div class="col-9 mt-6">
+                                                <input type="text" placeholder="Type here your question" class="input input-bordered w-full max-w-xs" name="question"/>
+
+
+                                                <input class="btn btn-success mt-1" type="submit" value="Envoyer" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                <% } %>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+        <button type="button" id="cancelButton"
+                class="mt-6 px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600" onclick="goBack()">Cancel</button></div>
+</div>
+
+<script>
+    function refreshPage() {
+        window.location.reload();
+    }
+    function goBack() {
+        window.history.back();
+    }
+</script>
+</div>
