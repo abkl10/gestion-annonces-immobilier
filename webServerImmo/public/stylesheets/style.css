@@ -926,9 +926,6 @@ select {
 .-top-40 {
   top: -10rem;
 }
-.-top-80 {
-  top: -20rem;
-}
 .-top-\[21px\] {
   top: -21px;
 }
@@ -955,6 +952,9 @@ select {
 }
 .left-1\/2 {
   left: 50%;
+}
+.left-2 {
+  left: 0.5rem;
 }
 .left-3 {
   left: 0.75rem;
@@ -1081,9 +1081,6 @@ select {
 }
 .order-none {
   order: 0;
-}
-.col-span-2 {
-  grid-column: span 2 / span 2;
 }
 .float-right {
   float: right;
@@ -1431,6 +1428,9 @@ select {
 .max-h-20 {
   max-height: 5rem;
 }
+.max-h-40 {
+  max-height: 10rem;
+}
 .max-h-\[calc\(100\%-64px\)\] {
   max-height: calc(100% - 64px);
 }
@@ -1625,6 +1625,9 @@ select {
 }
 .max-w-sm {
   max-width: 24rem;
+}
+.max-w-xs {
+  max-width: 20rem;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -1910,9 +1913,6 @@ select {
      -moz-appearance: none;
           appearance: none;
 }
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
 .grid-cols-5 {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
@@ -1957,10 +1957,6 @@ select {
 }
 .gap-6 {
   gap: 1.5rem;
-}
-.gap-x-12 {
-  -moz-column-gap: 3rem;
-       column-gap: 3rem;
 }
 .gap-x-6 {
   -moz-column-gap: 1.5rem;
@@ -2613,14 +2609,6 @@ select {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-.py-48 {
-  padding-top: 12rem;
-  padding-bottom: 12rem;
-}
-.py-56 {
-  padding-top: 14rem;
-  padding-bottom: 14rem;
-}
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -2745,10 +2733,6 @@ select {
 }
 .text-5xl {
   font-size: 3rem;
-  line-height: 1;
-}
-.text-6xl {
-  font-size: 3.75rem;
   line-height: 1;
 }
 .text-\[0\.8rem\] {
@@ -3056,6 +3040,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity));
 }
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
+}
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -3162,10 +3150,6 @@ select {
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-.shadow-black {
-  --tw-shadow-color: #000;
-  --tw-shadow: var(--tw-shadow-colored);
-}
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -3189,10 +3173,6 @@ select {
 .ring-gray-300 {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(209 213 219 / var(--tw-ring-opacity));
-}
-.ring-gray-900 {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(17 24 39 / var(--tw-ring-opacity));
 }
 .ring-gray-900\/10 {
   --tw-ring-color: rgb(17 24 39 / 0.1);
