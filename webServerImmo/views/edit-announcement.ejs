@@ -84,25 +84,6 @@
                 </div>
             </div>
 
-            <!-- Display existing images -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-900">Existing Photos</label>
-                <div class="mt-2">
-                    <% announcement.photos.forEach((photo, index) => { %>
-                        <div id="relative" class="relative inline-block">
-        <span class="cursor-pointer text-red-600 absolute top-2 left-2 delete-photo-button"
-              data-index="<%= index %>"
-              data-announcement-id="<%= announcement._id %>">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-    </svg>
-</span>
-                            <!-- Display the existing photo -->
-                            <img src="/images/<%= photo %>" alt="Existing Photo" class="max-w-xs max-h-xs mb-2">
-                        </div>
-                    <% }); %>
-
-                </div>
 
                 <!-- Allow users to upload new images -->
                 <div class="mb-4">

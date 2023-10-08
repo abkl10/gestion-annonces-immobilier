@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Annonce = require('../models/annonces');
+const fs = require('fs');
 const path=require('path');
 
 const authCheck=(req, res, next)=>{
@@ -144,7 +145,7 @@ router.post('/edit-announcement/:id', async (req, res) => {
             return res.status(404).send('Announcement not found');
         }
 
-        // Update
+        // Update announcement data
         announcement.titre = updatedAnnouncementData.titre;
         announcement.type = updatedAnnouncementData.type;
         announcement.status = updatedAnnouncementData.status;
@@ -152,7 +153,7 @@ router.post('/edit-announcement/:id', async (req, res) => {
         announcement.prix = updatedAnnouncementData.prix;
         announcement.publication = updatedAnnouncementData.publication === 'on';
 
-        // Handle photos
+        // Handle photos replacement
         if (req.files && req.files.photos) {
             const imageDossier = __dirname + '/../public/images/';
             const photoSrc = [];
@@ -161,6 +162,18 @@ router.post('/edit-announcement/:id', async (req, res) => {
                 req.files.photos = [req.files.photos];
             }
 
+            // Remove existing photos
+            announcement.photos.forEach((existingPhoto) => {
+                const existingPhotoPath = path.join(imageDossier, existingPhoto);
+                fs.unlink(existingPhotoPath, (err) => {
+                    if (err) {
+                        console.error(err);
+                        // Handle the error here
+                    }
+                });
+            });
+
+            // Add new photos
             req.files.photos.forEach((p, i) => {
                 const splittedName = p.name.split('.');
                 const imgUrl =
@@ -176,7 +189,10 @@ router.post('/edit-announcement/:id', async (req, res) => {
                 });
                 photoSrc.push(imgUrl);
             });
-            announcement.photos = photoSrc;        }
+
+            announcement.photos = photoSrc;
+        }
+
         // Save the updated announcement
         await announcement.save();
 
@@ -189,53 +205,23 @@ router.post('/edit-announcement/:id', async (req, res) => {
 });
 
 
-
-router.get('/delete-image/:announcementId', async (req, res) => {
-    const announcementId = req.params.announcementId;
-    const index = req.query.index;
-
+router.get('/read/:id', async (req, res) => {
+    const announcementId = req.params.id;
     try {
-        // Find the announcement by ID and remove the image
+        // Retrieve the specific announcement by ID
         const announcement = await Annonce.findById(announcementId);
-
         if (!announcement) {
             return res.status(404).send('Announcement not found');
         }
 
-        if (!announcement.photos || !Array.isArray(announcement.photos) || index < 0 || index >= announcement.photos.length) {
-            return res.status(404).send('Image not found in announcement');
-        }
-
-        // Delete the image from the database
-        const deletedImage = announcement.photos.splice(index, 1)[0];
-        await announcement.save();
-
-        // Delete the image file from the server (optional, if you want to delete the file from your server)
-        // You may need to adjust the path based on your file structure
-        const imagePath = path.join(__dirname, '/images/', deletedImage);
-        fs.unlinkSync(imagePath);
-
-        // Redirect back to the announcement page or any other appropriate page
-        res.redirect(`/announcement/${announcementId}`);
+        // Render the "read-ann" template with the specific announcement
+        res.render('read-announcements', { announcement: announcement, user:req.user});
     } catch (error) {
         console.error(error);
-        res.status(500).send(`An error occurred while deleting the image: ${error.message}`);
+        res.status(500).send(`An error occurred while fetching the announcement: ${error.message}`);
     }
 });
 
-
-
-router.get('/read', authCheck,async function(req, res, next) {
-    try {
-        // Use the find() method to retrieve all announcements
-        const announcements = await Annonce.find({publication: true});
-        // Render the 'annonces' view and pass the announcements as data
-        res.render('read-announcements', { title: 'Read-Front', announcements: announcements, user:req.user });
-    } catch (error) {
-        console.error("Error retrieving announcements:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
 router.post("/:id", async function (req, res) {
         try {
             // Find the announcement by its unique ID

@@ -2,12 +2,12 @@
 <%- include('nav.ejs') %>
 <div class="min-h-screen flex items-center justify-center">
     <div class="w-1/2 mb-6 "> <!-- Adjust the width as needed -->
-        <% announcements.forEach(function(announcement) { %>
+
             <h2 class="mb-12 text-center text-3xl font-bold">Announcement <%= announcement.titre %></h2>
-        <% });%>
-        <% announcements.forEach(function(announcement) { %>
+
             <div class="mb-6 lg:mb-0">
                 <div class="announcement-card">
+
                     <div class="relative block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
                         <div class="flex">
                             <!-- Add your carousel here -->
@@ -112,7 +112,7 @@
                     </div>
                 </div>
             </div>
-        <% }); %>
+
         <button type="button" id="cancelButton"
                 class="mt-6 px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600" onclick="goBack()">Cancel</button></div>
 </div>
