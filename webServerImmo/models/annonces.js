@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+
 const Schema = mongoose.Schema;
 
 const annoncesShema = new Schema({
@@ -48,7 +50,6 @@ const annoncesShema = new Schema({
             ]
         }
     ]
-});
-
+}, { timestamps: true });
+annoncesShema.plugin(mongoosePaginate);
 module.exports = mongoose.model('annonces', annoncesShema);
-

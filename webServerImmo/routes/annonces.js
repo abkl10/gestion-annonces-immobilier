@@ -3,6 +3,7 @@ var router = express.Router();
 var Annonce = require('../models/annonces');
 const fs = require('fs');
 const path=require('path');
+const perPage = 3;
 
 const authCheck=(req, res, next)=>{
     if(!req.user){
@@ -12,12 +13,27 @@ const authCheck=(req, res, next)=>{
         next();//go on of the next piece of the middleware
     }
 }
+
 router.get('/annonces', async function(req, res, next) {
     try {
-        // Use the find() method to retrieve all announcements
-        const announcements = await Annonce.find({publication: true});
-        // Render the 'annonces' view and pass the announcements as data
-        res.render('annonces', { title: 'Annonces', announcements: announcements, user:req.user });
+        const currentPage = parseInt(req.query.page) || 1;
+
+        const options = {
+            page: currentPage,
+            limit: perPage,
+        };
+
+        const query = { publication: true }; // Add any other filters you need here
+
+        const paginatedAnnouncements = await Annonce.paginate(query, options);
+
+        res.render('annonces', {
+            title: 'Annonces',
+            announcements: paginatedAnnouncements.docs,
+            user: req.user,
+            currentPage: currentPage,
+            totalPages: paginatedAnnouncements.totalPages,
+        });
     } catch (error) {
         console.error("Error retrieving announcements:", error);
         res.status(500).send("Internal Server Error");
