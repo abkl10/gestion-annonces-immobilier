@@ -14,7 +14,8 @@ const authCheck=(req, res, next)=>{
     }
 }
 
-router.get('/annonces', async function(req, res, next) {
+
+router.get('/annonces',async function(req, res, next) {
     try {
         const currentPage = parseInt(req.query.page) || 1;
 
@@ -221,7 +222,7 @@ router.post('/edit-announcement/:id', async (req, res) => {
 });
 
 
-router.get('/read/:id', async (req, res) => {
+router.get('/read/:id', authCheck,async (req, res) => {
     const announcementId = req.params.id;
     try {
         // Retrieve the specific announcement by ID
